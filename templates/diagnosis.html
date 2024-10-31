@@ -21,16 +21,72 @@
         </nav>
     </header>
 
-    <!-- Drag-and-Drop Upload Section -->
-    <main class="upload-section">
-        <h1>Upload Tomato Plant Image for Diagnosis</h1>
-        <div class="upload-container" id="uploadContainer">
-            <p>Drag & Drop your image here or <label for="fileInput" class="file-label">Browse</label></p>
-            <input type="file" id="fileInput" accept="image/*" hidden>
-        </div>
-        <button id="uploadButton">Upload Image</button>
-    </main>
+    <!-- Drag-and-Drop Container -->
+ <!-- Upload Container -->
+    <div id="upload-container">
+        <h2>Upload your File :</h2>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" id="imageUpload" name="file" accept="image/*" hidden required>
+            <label id="drop-zone" for="imageUpload">
+                <img src="/static/img/upload-icon.png" alt="Upload Icon" class="upload-icon">
+                <p>Drag & Drop<br>or <span class="browse">browse</span></p>
+                <small>Supports: JPEG, JPG, PNG</small>
+            </label>
+            <button type="submit" id="predictButton">Predict Disease</button>
+        </form>
+        <div id="predictionResult"></div>
+    </div>
 
-    <script src="/static/js/upload.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            const dropZone = $("#drop-zone");
+            const fileInput = $("#imageUpload");
+
+            // Handle drag-and-drop events
+            dropZone.on("dragover", function (e) {
+                e.preventDefault();
+                dropZone.addClass("dragover");
+            });
+
+            dropZone.on("dragleave", function (e) {
+                e.preventDefault();
+                dropZone.removeClass("dragover");
+            });
+
+            dropZone.on("drop", function (e) {
+                e.preventDefault();
+                const files = e.originalEvent.dataTransfer.files;
+                if (files.length) {
+                    fileInput[0].files = files;
+                }
+            });
+
+            // Form submission via AJAX
+            $('#uploadForm').on('submit', function (e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                $.ajax({
+                    url: '/predict',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        $('#predictionResult').html(`<h3>Prediction: ${data.predicted_class} (Confidence: ${(data.confidence * 100).toFixed(2)}%)</h3>`);
+                    },
+                    error: function () {
+                        $('#predictionResult').html('<h3>Error in prediction. Please try again.</h3>');
+                    }
+                });
+            });
+
+            // Click to open file selector
+            dropZone.on("click", function () {
+                fileInput.click();
+            });
+        });
+    </script>
 </body>
 </html>
