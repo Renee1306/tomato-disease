@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tomato Land - Support Chat</title>
+    <link rel="stylesheet" href="/static/css/support.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2&display=swap">
+</head>
+<body>
+    <!-- Header Section with Chatomato Image -->
+    <header class="header">
+        <div class="logo">
+            <img src="/static/img/logo.png" alt="TomatoPlant Logo" style="width: 250px; height: auto;">
+        </div>
+        <nav class="nav">
+            <a href="{{ url_for('home') }}" class="{{ 'active' if request.path == '/' else '' }}">Home</a>
+            <a href="{{ url_for('diagnosis') }}" class="{{ 'active' if request.path == '/diagnosis' else '' }}">Diagnosis</a>
+            <a href="{{ url_for('types') }}" class="{{ 'active' if request.path == '/types' else '' }}">Types</a>
+            <a href="{{ url_for('support') }}" class="{{ 'active' if request.path == '/support' else '' }}">Support</a>
+        </nav>
+    </header>
+
+    <div class="chat-container">
+        <div id="chat-box" class="chat-box">
+            <!-- Welcome Message -->
+            <div class="ai-message-wrapper">
+                <div class="ai-header">
+                    <img src="/static/img/chatomato.png" alt="Chatomato Logo" class="ai-logo">
+                </div>
+                <div class="message ai-message">
+                    Hi! Chatomato is here to assist you! Please type your question.
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <!-- Footer Input Section -->
+    <footer class="footer">
+        <form id="question-form" class="question-form">
+            <input type="text" id="question" name="question" placeholder="Type your question here..." required autocomplete="off">
+            <button type="submit">Send</button>
+        </form>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#question-form").on("submit", function(event) {
+                event.preventDefault();
+                var question = $("#question").val();
+                
+                $("#chat-box").append('<div class="message user-message">' + question + '</div>');
+                $("#question").val(""); // Clear input
+                
+                $("#chat-box").scrollTop($("#chat-box")[0].scrollHeight);
+                
+                let typingIndicator = $(`
+                    <div class="ai-message-wrapper typing-indicator">
+                        <div class="ai-header">
+                            <img src="/static/img/chatomato.png" alt="Chatomato Logo" class="ai-logo">
+                        </div>
+                        <div class="message ai-message typing">Chatomato is typing<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></div>
+                    </div>
+                `);
+                $("#chat-box").append(typingIndicator);
+                
+                $.post("/ask", { question: question }, function(data) {
+                    typingIndicator.remove();
+                    let cleanResponse = data.response.replace(/```html|```/g, "").trim();
+    
+                    $("#chat-box").append(`
+                        <div class="ai-message-wrapper">
+                            <div class="ai-header">
+                                <img src="/static/img/chatomato.png" alt="Chatomato Logo" class="ai-logo">
+                            </div>
+                            <div class="message ai-message">${cleanResponse}</div>
+                        </div>
+                    `);
+                    
+                    // Scroll to the bottom of the chat
+                    $("#chat-box").scrollTop($("#chat-box")[0].scrollHeight);
+                });
+            });
+        });
+    </script>
+      
+</body>
+</html>

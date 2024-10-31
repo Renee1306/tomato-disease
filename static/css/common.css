@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Baloo 2', Arial, sans-serif;
+}
+
+/* Header Styling */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: #fff;
+}
+
+.nav a {
+    margin: 0 20px;
+    color: #333;
+    text-decoration: none;
+    font-size: 20px;
+    transition: color 0.3s ease, border-bottom 0.3s ease; /* Smooth transition */
+}
+
+.nav a:hover {
+    color: #4a653e; /* Change to a green shade on hover */
+    border-bottom: 2px solid #4a653e;
+}
+
+.nav a.active {
+    color: #4a653e; /* Active color is green */
+    font-weight: bold;
+    border-bottom: 2px solid #597e00; /* Optional underline for active page */
+}

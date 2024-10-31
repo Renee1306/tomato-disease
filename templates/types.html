@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tomato Land</title>
+    <link rel="stylesheet" href="/static/css/types.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2&display=swap">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="logo">
+            <img src="/static/img/logo.png" alt="TomatoPlant Logo" style="width: 250px; height: auto;">
+        </div>
+        <nav class="nav">
+            <a href="{{ url_for('home') }}" class="{{ 'active' if request.path == '/' else '' }}">Home</a>
+            <a href="{{ url_for('diagnosis') }}" class="{{ 'active' if request.path == '/diagnosis' else '' }}">Diagnosis</a>
+            <a href="{{ url_for('types') }}" class="{{ 'active' if request.path == '/types' else '' }}">Types</a>
+            <a href="{{ url_for('support') }}" class="{{ 'active' if request.path == '/support' else '' }}">Support</a>
+        </nav>
+    </header>
+
+    <!-- Types of Tomato Diseases Section -->
+    <main class="types-section">
+        <h1>Types of Tomato Leaf Diseases</h1>
+        <div id="disease-grid" class="disease-grid">
+        </div>
+    </main>
+
+    <!-- Modal Structure -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3 id="modal-title"></h3>
+            <img id="modal-image" class="modal-image" src="" alt="">
+            <p><strong>Scientific Name:</strong> <span id="modal-scientific-name"></span></p>
+            <p><strong>Causes:</strong> <span id="modal-causes"></span></p>
+            <p><strong>Symptoms:</strong> <span id="modal-symptoms"></span></p>
+            <p><strong>Spread and Transmission:</strong> <span id="modal-spread"></span></p>
+            <p><strong>Prevention:</strong> <span id="modal-prevention"></span></p>
+            <p><strong>Treatment:</strong> <span id="modal-treatment"></span></p>
+            <p><strong>Impact:</strong> <span id="modal-impact"></span></p>
+            <p><strong>Seasonal Occurrence:</strong> <span id="modal-season"></span></p>
+        </div>
+    </div>
+
+    <script src="/static/js/types-script.js"></script>
+</body>
+</html>

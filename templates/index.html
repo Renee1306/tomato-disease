@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chat Interface</title>
+    <link rel="stylesheet" href="static/css/test.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="chat-container">
+        <div id="chat-box" class="chat-box">
+            <!-- Messages will appear here -->
+        </div>
+        <form id="chat-form">
+            <input type="text" id="question" name="question" placeholder="Type a message..." autocomplete="off" required>
+            <button type="submit">Send</button>
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Handle form submission
+            $("#chat-form").on("submit", function(event) {
+                event.preventDefault();
+                var question = $("#question").val();
+                
+                // Display user's message in the chat box
+                $("#chat-box").append('<div class="message user-message">' + question + '</div>');
+                $("#question").val(""); // Clear input
+                
+                // Scroll to the bottom of the chat
+                $("#chat-box").scrollTop($("#chat-box")[0].scrollHeight);
+                
+                // Add typing indicator
+                let typingIndicator = $('<div class="message ai-message typing">AI is typing<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></div>');
+                $("#chat-box").append(typingIndicator);
+                
+                $.post("/ask", { question: question }, function(data) {
+    // Remove typing indicator
+    typingIndicator.remove();
+
+    // Display AI's response in the chat box with HTML rendering
+    $("#chat-box").append('<div class="message ai-message">' + data.response + '</div>');
+    
+    // Scroll to the bottom of the chat
+    $("#chat-box").scrollTop($("#chat-box")[0].scrollHeight);
+});
+
+            });
+        });
+    </script>
+</body>
+</html>

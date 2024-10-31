@@ -1,0 +1,54 @@
+@import url('common.css');
+
+.main {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; 
+    padding: 10px 40px; 
+    background-color: #f9f9f9;
+    min-height: 60vh; 
+    font-family: 'Baloo 2', Arial, sans-serif;
+}
+
+.content {
+    width: 45%;
+    margin-top: 200px;
+    margin-left: 50px;
+}
+
+.content h1 {
+    font-size: 55px;
+    color: #4a653e;
+    margin-bottom: 20px;
+    max-width: 1000px;
+    white-space: nowrap; 
+}
+
+.content p {
+    font-size: 22px;
+    color: #666;
+    margin-bottom: 30px;
+    max-width: 600px;
+}
+
+.explore-btn {
+    padding: 15px 30px;
+    font-size: 18px;
+    color: #fff;
+    background-color: #597e00;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.main-image {
+    width: 30%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.main-image img {
+    width: 100%;
+    height: auto;
+    margin-right:50px;
+}

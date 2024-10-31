@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tomato Land - Upload Image</title>
+    <link rel="stylesheet" href="/static/css/diagnosis.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2&display=swap">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="logo">
+            <img src="/static/img/logo.png" alt="TomatoPlant Logo" style="width: 250px; height: auto;">
+        </div>
+        <nav class="nav">
+            <a href="{{ url_for('home') }}" class="{{ 'active' if request.path == '/' else '' }}">Home</a>
+            <a href="{{ url_for('diagnosis') }}" class="{{ 'active' if request.path == '/diagnosis' else '' }}">Diagnosis</a>
+            <a href="{{ url_for('types') }}" class="{{ 'active' if request.path == '/types' else '' }}">Types</a>
+            <a href="{{ url_for('support') }}" class="{{ 'active' if request.path == '/support' else '' }}">Support</a>
+        </nav>
+    </header>
+
+    <!-- Drag-and-Drop Upload Section -->
+    <main class="upload-section">
+        <h1>Upload Tomato Plant Image for Diagnosis</h1>
+        <div class="upload-container" id="uploadContainer">
+            <p>Drag & Drop your image here or <label for="fileInput" class="file-label">Browse</label></p>
+            <input type="file" id="fileInput" accept="image/*" hidden>
+        </div>
+        <button id="uploadButton">Upload Image</button>
+    </main>
+
+    <script src="/static/js/upload.js"></script>
+</body>
+</html>

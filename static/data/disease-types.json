@@ -1,0 +1,110 @@
+[
+  {
+    "id": "ylcv",
+    "name": "Yellow Leaf Curl Virus",
+    "scientific_name": "Tomato yellow leaf curl virus (TYLCV)",
+    "causes": "Spread by whiteflies.",
+    "symptoms": "Curling and yellowing of leaves.",
+    "spread_transmission": "Whiteflies transmit the virus while feeding on plant sap.",
+    "prevention": "Control whitefly populations with insecticides or barriers.",
+    "treatment": "Remove and dispose of infected plants.",
+    "impact": "Reduces yield and affects fruit quality.",
+    "seasonal_occurrence": "Common in warmer seasons with high whitefly activity."
+  },
+  {
+    "id": "bacterial_spot",
+    "name": "Bacterial Spot",
+    "scientific_name": "Xanthomonas campestris pv. vesicatoria",
+    "causes": "Spread by bacteria infecting leaves and fruit.",
+    "symptoms": "Small dark spots on leaves, often with a yellow halo.",
+    "spread_transmission": "Spreads through water, soil, and contaminated tools.",
+    "prevention": "Avoid overhead watering and disinfect tools.",
+    "treatment": "Apply copper-based fungicides.",
+    "impact": "Affects plant health and reduces yield.",
+    "seasonal_occurrence": "Common in warm, humid conditions."
+  },
+  {
+    "id": "early_blight",
+    "name": "Early Blight",
+    "scientific_name": "Alternaria solani",
+    "causes": "Caused by a fungal infection.",
+    "symptoms": "Dark spots with concentric rings on leaves.",
+    "spread_transmission": "Spores spread through wind, rain, and soil.",
+    "prevention": "Rotate crops and avoid overhead watering.",
+    "treatment": "Apply fungicide regularly.",
+    "impact": "Reduces plant vigor and fruit yield.",
+    "seasonal_occurrence": "Most common in warm, wet weather."
+  },
+  {
+    "id": "leaf_mold",
+    "name": "Leaf Mold",
+    "scientific_name": "Passalora fulva",
+    "causes": "Fungal spores in humid environments.",
+    "symptoms": "Yellow spots on upper leaf surfaces, leading to mold on undersides.",
+    "spread_transmission": "Spread by air in high humidity conditions.",
+    "prevention": "Increase ventilation and avoid overcrowding plants.",
+    "treatment": "Use fungicides and improve airflow around plants.",
+    "impact": "Reduces photosynthesis and overall plant health.",
+    "seasonal_occurrence": "Most common in cool, damp weather."
+  },
+  {
+    "id": "septoria_leaf_spot",
+    "name": "Septoria Leaf Spot",
+    "scientific_name": "Septoria lycopersici",
+    "causes": "Fungal infection.",
+    "symptoms": "Small, circular spots with dark centers on leaves.",
+    "spread_transmission": "Spread by water, soil, and infected seeds.",
+    "prevention": "Use disease-free seeds and maintain plant spacing.",
+    "treatment": "Apply fungicides and remove infected leaves.",
+    "impact": "Weakens plant, reduces photosynthesis.",
+    "seasonal_occurrence": "Common in warm, wet climates."
+  },
+  {
+    "id": "target_spot",
+    "name": "Target Spot",
+    "scientific_name": "Corynespora cassiicola",
+    "causes": "Fungal infection.",
+    "symptoms": "Dark spots with target-like rings on leaves.",
+    "spread_transmission": "Spores spread by wind, water, and soil.",
+    "prevention": "Avoid overhead irrigation and remove infected leaves.",
+    "treatment": "Apply fungicides and remove diseased parts.",
+    "impact": "Reduces plant health and yield.",
+    "seasonal_occurrence": "Common in humid conditions."
+  },
+  {
+    "id": "two_spotted_spider_mite",
+    "name": "Two-Spotted Spider Mite Spot",
+    "scientific_name": "Tetranychus urticae",
+    "causes": "Caused by spider mites feeding on the plant.",
+    "symptoms": "Small yellowish spots on leaves.",
+    "spread_transmission": "Spread by contact with other plants and wind.",
+    "prevention": "Increase humidity and introduce natural predators.",
+    "treatment": "Use miticides and keep plant environment moist.",
+    "impact": "Reduces photosynthesis, weakens plant.",
+    "seasonal_occurrence": "Most common in hot, dry conditions."
+  },
+  {
+    "id": "mosaic_virus",
+    "name": "Mosaic Virus",
+    "scientific_name": "Tobacco mosaic virus (TMV)",
+    "causes": "Spread by aphids and contact with infected plants.",
+    "symptoms": "Mottled patterns on leaves, often with a yellow mosaic appearance.",
+    "spread_transmission": "Transmitted by insects or through contaminated tools.",
+    "prevention": "Use resistant varieties and control aphid populations.",
+    "treatment": "Remove and destroy infected plants.",
+    "impact": "Stunts plant growth and affects fruit production.",
+    "seasonal_occurrence": "Common in warmer seasons."
+  },
+  {
+    "id": "late_blight",
+    "name": "Late Blight",
+    "scientific_name": "Phytophthora infestans",
+    "causes": "Caused by a water mold in wet conditions.",
+    "symptoms": "Large, dark spots on leaves and fruit.",
+    "spread_transmission": "Spores spread by wind and water.",
+    "prevention": "Avoid overhead watering and remove infected plants.",
+    "treatment": "Apply fungicides and rotate crops.",
+    "impact": "Can destroy entire crops if untreated.",
+    "seasonal_occurrence": "Most common in cool, wet weather."
+  }
+]
