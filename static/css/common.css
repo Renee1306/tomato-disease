@@ -7,13 +7,12 @@
     font-family: 'Baloo 2', Arial, sans-serif;
 }
 
-/* Header Styling */
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px 40px;
-    background-color: #fff;
+    background-color: #ffffff;
 }
 
 .nav a {

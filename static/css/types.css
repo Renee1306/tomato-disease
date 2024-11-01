@@ -7,16 +7,6 @@
     font-family: 'Baloo 2', Arial, sans-serif;
 }
 
-/* Header Styling */
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 40px;
-    background-color: #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
 .logo img {
     width: 200px;
 }

@@ -1,26 +1,31 @@
 @import url('common.css');
 
 body {
-    font-family: 'Baloo 2', cursive;
-    display: flex;
-    flex-direction: column;
     background-color: #f5f7fa;
-    margin: 0;
 }
 
-#upload-container {
+#main-container {
+    display: flex;
+    gap: 40px;
+    padding: 0 40px;
     width: 100%;
-    max-width: 500px;
-    margin-top: 40px;
-    padding: 30px;
-    text-align: center;
+    max-width: 1600px;
+    margin-top: 20px;
+}
+
+/* Left Column Styling */
+#left-column {
+    flex: 1;
     background-color: #ffffff;
+    padding: 30px;
     border-radius: 12px;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-bottom: 10px;
 }
 
-#upload-container h2 {
-    font-size: 20px;
+#left-column h2 {
+    font-size: 24px;
     color: #333;
     margin-bottom: 20px;
 }
@@ -39,15 +44,25 @@ body {
     transition: background-color 0.3s, border-color 0.3s;
 }
 
+#drop-zone:hover,
+#drop-zone.dragover {
+    background-color: #eaf4fc;
+    border-color: #4a653e;
+}
+
+.upload-icon {
+    width: 50px;
+    margin-bottom: 15px;
+}
+
 #drop-zone p {
     font-size: 18px;
-    margin: 10px 0;
+    color: #333;
 }
 
 #drop-zone .browse {
-    color: #007bff;
+    color: #4a653e;
     text-decoration: underline;
-    cursor: pointer;
 }
 
 #drop-zone small {
@@ -55,21 +70,11 @@ body {
     color: #888;
 }
 
-#drop-zone.dragover {
-    background-color: #eaf4fc;
-    border-color: #007bff;
-}
-
-.upload-icon {
-    width: 40px;
-    margin-bottom: 15px;
-}
-
 #predictButton {
     margin-top: 20px;
-    padding: 12px 20px;
-    font-size: 16px;
-    background-color: #007bff;
+    padding: 12px 25px;
+    font-size: 18px;
+    background-color: #4a653e;
     color: #fff;
     border: none;
     border-radius: 6px;
@@ -78,13 +83,152 @@ body {
 }
 
 #predictButton:hover {
-    background-color: #0056b3;
+    background-color: #3a5230;
+}
+
+#imagePreviewContainer {
+    margin-top: 20px;
+}
+
+#imagePreview {
+    width: 100%;
+    max-width: 300px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 #predictionResult h3 {
-    font-size: 18px;
+    font-size: 20px;
     color: #333;
     margin-top: 20px;
+}
+
+/* Right Column Styling */
+#right-column {
+    flex: 1;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+
+#right-column h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+#additionalInfoForm h3 {
+    font-size: 22px;
+    color: #4a653e;
+    margin-bottom: 20px;
+}
+
+#additionalInfoForm label {
+    display: block;
+    margin-top: 15px;
+    font-size: 16px;
+    color: #333;
+}
+
+#additionalInfoForm select,
+#additionalInfoForm input[type="number"],
+#additionalInfoForm input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+#additionalInfoForm button {
+    margin-top: 25px;
+    padding: 12px 25px;
+    font-size: 18px;
+    background-color: #4a653e;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#additionalInfoForm button:hover {
+    background-color: #3a5230;
+}
+
+/* Treatment Result Styling */
+#treatmentResult {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #fafafa;
+    border-radius: 8px;
+    color: #333;
+}
+
+#treatmentSuggestionSection {
+    width: 100%; /* Match the width of the main container */
+    max-width: 1600px; /* Ensure it does not exceed the main container's max width */
+    margin: 20px auto; /* Center it horizontally and add some space above */
+    padding: 0 40px; /* Match the horizontal padding of main-container */
+    box-sizing: border-box;
+}
+
+.modal-content {
+    background-color: #ffffff;
+    padding: 20px 30px; /* Add padding on left and right */
+    border-radius: 12px; /* Rounded corners */
+    border: 3px solid #4a653e; /* Green border for outer edge */
+    width: 100%;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+    text-align: left;
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-button:hover {
+    color: #333;
+}
+
+
+/* Loading Spinner Styles */
+#loadingSpinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1); /* Light border */
+    border-top: 4px solid #4a653e; /* Darker border for animation */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 10px; /* Spacing above "Loading..." text */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#loadingSpinner p {
+    color: #4a653e;
+    font-size: 16px;
+    margin-top: 5px;
 }
 
 

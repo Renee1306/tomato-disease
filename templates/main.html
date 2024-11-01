@@ -26,8 +26,10 @@
         <div class="content">
             <h1>Tomato Leaf Disease Detection</h1>
             <p>Discover how to identify and manage diseases in your tomato plants to keep them healthy. Learn essential care tips to ensure your tomato plant stays strong.</p>
-            <button class="explore-btn">Detect Now</button>
-        </div>
+            <a href="{{ url_for('diagnosis') }}">
+                <button class="explore-btn">Detect Now</button>
+            </a>
+                    </div>
         <div class="main-image">
             <img src="static/img/tomato-plant.png" alt="Plant Image">
         </div>

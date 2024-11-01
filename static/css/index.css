@@ -19,7 +19,7 @@
 .content h1 {
     font-size: 55px;
     color: #4a653e;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     max-width: 1000px;
     white-space: nowrap; 
 }
@@ -28,17 +28,21 @@
     font-size: 22px;
     color: #666;
     margin-bottom: 30px;
-    max-width: 600px;
+    max-width: 800px;
 }
 
 .explore-btn {
-    padding: 15px 30px;
+    padding: 10px 25px;
     font-size: 18px;
     color: #fff;
-    background-color: #597e00;
+    background-color: #4a653e;
     border: none;
     cursor: pointer;
     border-radius: 5px;
+}
+
+.explore-btn:hover {
+    background-color: #3a5230;
 }
 
 .main-image {

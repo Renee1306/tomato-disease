@@ -21,48 +21,149 @@
         </nav>
     </header>
 
-    <!-- Drag-and-Drop Container -->
- <!-- Upload Container -->
-    <div id="upload-container">
-        <h2>Upload your File :</h2>
-        <form id="uploadForm" enctype="multipart/form-data">
-            <input type="file" id="imageUpload" name="file" accept="image/*" hidden required>
-            <label id="drop-zone" for="imageUpload">
-                <img src="/static/img/upload-icon.png" alt="Upload Icon" class="upload-icon">
-                <p>Drag & Drop<br>or <span class="browse">browse</span></p>
-                <small>Supports: JPEG, JPG, PNG</small>
-            </label>
-            <button type="submit" id="predictButton">Predict Disease</button>
-        </form>
-        <div id="predictionResult"></div>
+    <!-- Main Container -->
+    <div id="main-container">
+        <!-- Left Column for Image Upload and Preview -->
+        <div id="left-column">
+            <h2>Upload your File:</h2>
+            <form id="uploadForm" enctype="multipart/form-data">
+                <input type="file" id="imageUpload" name="file" accept="image/*" hidden required>
+                <label id="drop-zone" for="imageUpload">
+                    <img src="/static/img/upload-icon.png" alt="Upload Icon" class="upload-icon">
+                    <p>Drag & Drop<br>or <span class="browse">browse</span></p>
+                    <small>Supports: JPEG, JPG, PNG</small>
+                </label>
+                <div id="imagePreviewContainer">
+                    <img id="imagePreview" src="" alt="Uploaded Image Preview" style="display: none;">
+                </div>
+                <button type="submit" id="predictButton">Predict Disease</button>
+            </form>
+            <div id="predictionResult"></div>
+        </div>
+
+        <!-- Right Column for Additional Information Form -->
+        <div id="right-column">
+            <h2>Provide Additional Information for Treatment Suggestion:</h2>
+            <form id="additionalInfoForm" style="display:none;">                
+                <label for="severity">Severity:</label>
+                <select id="severity" name="severity" required>
+                    <option value="mild">Mild</option>
+                    <option value="moderate">Moderate</option>
+                    <option value="severe">Severe</option>
+                </select>
+
+                <label for="age">Plant's Age:</label>
+                <select id="age" name="age" required>
+                    <option value="seedling">Seedling</option>
+                    <option value="young">Young Plant</option>
+                    <option value="mature">Mature</option>
+                </select>
+
+                <label for="size">Approximate Size:</label>
+                <select id="size" name="size" required>
+                    <option value="small">Small</option>
+                    <option value="medium">Medium</option>
+                    <option value="big">Big</option>
+                </select>
+
+                <label for="wateringFrequency">Frequency of Watering (times per week):</label>
+                <input type="number" id="wateringFrequency" name="wateringFrequency" min="1" required>
+
+                <label for="location">Plant Grown Location:</label>
+                <select id="location" name="location" required>
+                    <option value="outdoors">Outdoors</option>
+                    <option value="greenhouse">In a Greenhouse</option>
+                    <option value="indoors">Indoors</option>
+                </select>
+
+                <label for="variety">Tomato Variety:</label>
+                <select id="variety" name="variety" required>
+                    <option value="roma">Roma</option>
+                    <option value="cherry">Cherry</option>
+                    <option value="beefsteak">Beefsteak</option>
+                    <option value="heirloom">Heirloom</option>
+                    <option value="grape">Grape</option>
+                    <option value="plum">Plum</option>
+                    <option value="san_marzano">San Marzano</option>
+                    <option value="yellow_pearl">Yellow Pear</option>
+                    <option value="green_zebra">Green Zebra</option>
+                    <option value="black_krim">Black Krim</option>
+                    <option value="better_boy">Better Boy</option>
+                    <option value="early_girl">Early Girl</option>
+                    <option value="celebrity">Celebrity</option>
+                    <option value="brandywine">Brandywine</option>
+                    <option value="oxheart">Oxheart</option>
+                    <option value="sun_gold">Sun Gold</option>
+                    <option value="sweet_million">Sweet Million</option>
+                </select>                
+
+                <label for="pastTreatments">Past Treatments Used (optional):</label>
+                <input type="text" id="pastTreatments" name="pastTreatments" placeholder="e.g., Neem oil, copper fungicide">
+
+                <button type="button" id="getTreatmentButton">Get Treatment Suggestion</button>
+            </form>
+
+            <!-- Loading Spinner -->
+            <div id="loadingSpinner" style="display: none;">
+                <div class="spinner"></div>
+                <p>Loading...</p>
+            </div>
+
+        </div>
     </div>
 
-
+    <!-- Treatment Suggestion Section Positioned Below the Main Container -->
+    <div id="treatmentSuggestionSection" style="display: none;">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <p id="treatmentSuggestion"></p>
+        </div>
+    </div>
+    
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
             const dropZone = $("#drop-zone");
             const fileInput = $("#imageUpload");
-
+    
             // Handle drag-and-drop events
             dropZone.on("dragover", function (e) {
                 e.preventDefault();
                 dropZone.addClass("dragover");
             });
-
+    
             dropZone.on("dragleave", function (e) {
                 e.preventDefault();
                 dropZone.removeClass("dragover");
             });
-
+    
             dropZone.on("drop", function (e) {
                 e.preventDefault();
+                dropZone.removeClass("dragover");
                 const files = e.originalEvent.dataTransfer.files;
                 if (files.length) {
                     fileInput[0].files = files;
+                    previewImage(files[0]);
                 }
             });
-
+    
+            // Display preview of uploaded image
+            function previewImage(file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    $("#imagePreview").attr("src", e.target.result).show();
+                };
+                reader.readAsDataURL(file);
+            }
+    
+            // Show preview on file input change
+            fileInput.on("change", function () {
+                const file = this.files[0];
+                if (file) {
+                    previewImage(file);
+                }
+            });
+    
             // Form submission via AJAX
             $('#uploadForm').on('submit', function (e) {
                 e.preventDefault();
@@ -74,19 +175,68 @@
                     contentType: false,
                     processData: false,
                     success: function (data) {
-                        $('#predictionResult').html(`<h3>Prediction: ${data.predicted_class} (Confidence: ${(data.confidence * 100).toFixed(2)}%)</h3>`);
+                        $('#predictionResult').html(`
+                        <h3>Prediction: ${data.predicted_class}</h3>
+                        <h3>Confidence: ${(data.confidence * 100).toFixed(2)}%</h3>
+                        `);
+                        $('#additionalInfoForm').show();
                     },
                     error: function () {
                         $('#predictionResult').html('<h3>Error in prediction. Please try again.</h3>');
                     }
                 });
             });
+    
+            // Treatment suggestion submission with loading spinner
+            $('#getTreatmentButton').on('click', function () {
+                const additionalData = {
+                    severity: $('#severity').val(),
+                    age: $('#age').val(),
+                    size: $('#size').val(),
+                    wateringFrequency: $('#wateringFrequency').val(),
+                    location: $('#location').val(),
+                    variety: $('#variety').val(),
+                    pastTreatments: $('#pastTreatments').val(),
+                    predicted_class: $('#predictionResult h3').text()
+                };
 
-            // Click to open file selector
-            dropZone.on("click", function () {
-                fileInput.click();
+                // Show loading spinner
+                $('#loadingSpinner').show();
+
+                $.ajax({
+                    url: '/get_treatment',
+                    type: 'POST',
+                    data: additionalData,
+                    success: function (data) {
+                        // Hide loading spinner
+                        $('#loadingSpinner').hide();
+
+                        // Populate and show the treatment suggestion section
+                        $('#treatmentSuggestion').html(data.response);
+                        $('#treatmentSuggestionSection').slideDown();
+                    },
+                    error: function () {
+                        // Hide loading spinner
+                        $('#loadingSpinner').hide();
+                        $('#treatmentSuggestion').html('Error in getting treatment suggestion. Please try again.');
+                        $('#treatmentSuggestionSection').slideDown();
+                    }
+                });
+            });
+
+            // Close the treatment suggestion section when the close button is clicked
+            $('.close-button').on('click', function () {
+                $('#treatmentSuggestionSection').slideUp();
+            });
+
+
+            // Close the modal when clicking outside the modal content
+            $(window).on('click', function (e) {
+                if ($(e.target).is('#treatmentModal')) {
+                    $('#treatmentModal').fadeOut();
+                }
             });
         });
-    </script>
+    </script>    
 </body>
 </html>

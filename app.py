@@ -14,11 +14,16 @@ IMG_SIZE = (256, 256)  # Adjust according to your model input size
 
 # Define the class names (use the ones from your dataset)
 class_names = [
-    'Tomato_Bacterial_spot', 'Tomato_Early_blight', 'Tomato_Late_blight',
-    'Tomato_Leaf_Mold', 'Tomato_Septoria_leaf_spot',
-    'Tomato_Spider_mites_Two_spotted_spider_mite', 'Tomato__Target_Spot',
-    'Tomato__Tomato_YellowLeaf__Curl_Virus', 'Tomato__Tomato_mosaic_virus',
-    'Tomato_healthy'
+    'Bacterial Spot', 
+    'Early Blight', 
+    'Late Blight',
+    'Leaf Mold', 
+    'Septoria Leaf Spot',
+    'Spider Mites Two Spotted Spider Mite', 
+    'Target Spot',
+    'Tomato Yellow Leaf Curl Virus', 
+    'Tomato Mosaic Virus',
+    'Healthy'
 ]
 
 # Helper function to preprocess image
@@ -34,7 +39,7 @@ load_dotenv()
 # Configure Google Generative AI
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
-# Create the Generative AI model
+# Create the Generative AI model for treatment suggestions
 generation_config = {
     "temperature": 1,
     "top_p": 0.95,
@@ -87,6 +92,45 @@ def predict():
         'confidence': float(np.max(prediction)) 
     })
 
+@app.route('/get_treatment', methods=['POST'])
+def get_treatment():
+    # Extract data from the form
+    predicted_class = request.form.get("predicted_class")
+    severity = request.form.get("severity")
+    age = request.form.get("age")
+    size = request.form.get("size")
+    watering_frequency = request.form.get("wateringFrequency")
+    location = request.form.get("location")
+    variety = request.form.get("variety")
+    past_treatments = request.form.get("pastTreatments", "None specified")
+
+    # Generate prompt for the Gemini API
+    prompt = f"""
+    You are a tomato disease treatment expert. The tomato leaf has been classified with the disease '{predicted_class}'. 
+    Additional details: 
+    - Severity: {severity}
+    - Plant Age: {age}
+    - Size: {size}
+    - Watering Frequency: {watering_frequency} times per week
+    - Location: {location}
+    - Variety: {variety}
+    - Past Treatments: {past_treatments}
+    
+    Based on these details, please suggest a personalized treatment plan in HTML format.
+    """
+    chat_session = genai_model.start_chat(history=[])
+    response = chat_session.send_message(prompt)
+    clean_response = response.text.replace("```html", "").replace("```", "").strip()
+    return jsonify({"response": clean_response})
+
+@app.route("/ask", methods=["POST"])
+def ask():
+    user_input = request.form.get("question")
+    chat_session1 = genai_model.start_chat(history=[])
+    response = chat_session1.send_message(f"You are a tomato leaf disease expert. Please provide a structured and organized answer in HTML format for: {user_input}.")
+    clean_response = response.text.replace("```html", "").replace("```", "").strip()
+    return jsonify({"response": clean_response})
+
 @app.route('/types')
 def types():
     return render_template('types.html')
@@ -94,14 +138,6 @@ def types():
 @app.route('/support')
 def support():
     return render_template('support.html')
-
-@app.route("/ask", methods=["POST"])
-def ask():
-    user_input = request.form.get("question")
-    chat_session = genai_model.start_chat(history=[])
-    response = chat_session.send_message(f"You are a tomato leaf disease expert. Please provide a structured and organized answer in HTML format for: {user_input}.")
-    clean_response = response.text.replace("```html", "").replace("```", "").strip()
-    return jsonify({"response": clean_response})
 
 if __name__ == '__main__':
     # Ensure the temp directory exists
