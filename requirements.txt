@@ -10,3 +10,4 @@ google.generativeai
 python-dotenv
 numpy
 Pillow
+huggingface_hub
