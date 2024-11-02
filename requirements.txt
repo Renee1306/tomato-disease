@@ -1,5 +1,5 @@
 Flask==2.1.1                  # For creating the web server
-tensorflow==2.9.1             # For loading and using the .h5 model
+tensorflow==2.13.0
 keras==2.9.0                  # Needed if separate Keras usage is required
 gunicorn==20.1.0              # For deploying the app (optional)
 requests==2.28.1              # For interacting with the Gemini API
