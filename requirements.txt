@@ -8,3 +8,5 @@ flask-cors        # Optional, to handle CORS if needed
 pandas            # Optional, for data handling with Gemini API results
 google.generativeai
 python-dotenv
+numpy
+Pillow
