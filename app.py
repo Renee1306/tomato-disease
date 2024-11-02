@@ -144,4 +144,4 @@ if __name__ == '__main__':
     # Ensure the temp directory exists
     if not os.path.exists('temp'):
         os.makedirs('temp')
-    app.run(debug=True)
+    app.run()
