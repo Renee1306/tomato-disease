@@ -1,0 +1,8 @@
+Flask==2.1.1                  # For creating the web server
+tensorflow==2.9.1             # For loading and using the .h5 model
+keras==2.9.0                  # Needed if separate Keras usage is required
+gunicorn==20.1.0              # For deploying the app (optional)
+requests==2.28.1              # For interacting with the Gemini API
+jinja2==3.1.2                 # For rendering HTML templates with Flask
+flask-cors==3.0.10            # Optional, to handle CORS if needed
+pandas==1.4.3                 # Optional, for data handling with Gemini API results
