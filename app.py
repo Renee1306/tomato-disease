@@ -5,9 +5,42 @@ from dotenv import load_dotenv
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 import numpy as np
+import tensorflow as tf
+from tensorflow.keras import layers
+from pymongo import MongoClient
+import datetime
+
+# Load environment variables from .env file
+load_dotenv()
+
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+
+# Get the MongoDB URI from the .env file
+mongodb_uri = os.getenv("MONGODB_URI")
+
+# Establish the connection
+client = MongoClient(mongodb_uri)
+
+db = client["predictions"]  
+collection = db["tomato"]  
+
+class SEBlock(layers.Layer):
+    def __init__(self, filters, reduction=16, **kwargs):  
+        super(SEBlock, self).__init__(**kwargs) 
+        self.global_avg_pool = layers.GlobalAveragePooling2D()
+        self.dense1 = layers.Dense(filters // reduction, activation='relu')
+        self.dense2 = layers.Dense(filters, activation='sigmoid')
+
+    def call(self, inputs):
+        se = self.global_avg_pool(inputs)
+        se = self.dense1(se)
+        se = self.dense2(se)
+        se = layers.Reshape((1, 1, se.shape[-1]))(se)  
+        return inputs * se  
+
 
 # Load the pre-trained CNN model for image classification
-cnn_model = load_model('cnn_model.h5')  # Replace with the actual path to your CNN model
+cnn_model = tf.keras.models.load_model("cnn_model.h5", custom_objects={'SEBlock': SEBlock})
 
 # Define the image size for the CNN model
 IMG_SIZE = (256, 256)  # Adjust according to your model input size
@@ -34,11 +67,6 @@ def preprocess_image(img_path, img_size):
     img_array /= 255.0  # Normalize to [0, 1]
     return img_array
 
-# Load environment variables from .env file
-load_dotenv()
-
-# Configure Google Generative AI
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 # Create the Generative AI model for treatment suggestions
 generation_config = {
@@ -64,7 +92,6 @@ def home():
 def diagnosis():
     return render_template('diagnosis.html')
 
-# Define route for uploading and predicting image
 @app.route('/predict', methods=['POST'])
 def predict():
     if 'file' not in request.files:
@@ -83,14 +110,28 @@ def predict():
     prediction = cnn_model.predict(img_array)
     predicted_class_idx = np.argmax(prediction, axis=1)[0]  
     predicted_class_name = class_names[predicted_class_idx]  
+    confidence_score = float(np.max(prediction))  # Get the confidence score
 
     # Clean up the temporary image file
     os.remove(img_path)
     
-    # Return the prediction as JSON
+    # Save the prediction to MongoDB
+    try:
+        collection.insert_one({
+            "image_name": file.filename,
+            "predicted_class": predicted_class_name,
+            "confidence": confidence_score,
+            "timestamp": datetime.datetime.now()  # Add timestamp
+        })
+        db_status = "Prediction saved to database successfully."
+    except Exception as e:
+        db_status = f"Failed to save prediction to database: {str(e)}"
+    
+    # Return the prediction and database status as JSON
     return jsonify({
         'predicted_class': predicted_class_name,
-        'confidence': float(np.max(prediction)) 
+        'confidence': confidence_score,
+        'db_status': db_status
     })
 
 @app.route('/get_treatment', methods=['POST'])
@@ -140,8 +181,28 @@ def types():
 def support():
     return render_template('support.html')
 
+@app.route('/statistics')
+def statistics():
+    return render_template('statistics.html')
+
+@app.route('/statistics-data', methods=['GET'])
+def get_statistics_data():
+    try:
+        disease_counts = collection.aggregate([
+            {"$group": {"_id": "$predicted_class", "count": {"$sum": 1}}},
+            {"$sort": {"count": -1}}
+        ])
+        
+        # Convert cursor to a list and format the response
+        data = [{"disease": doc["_id"], "count": doc["count"]} for doc in disease_counts if doc["_id"]]
+        return jsonify(data)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+
 if __name__ == '__main__':
     # Ensure the temp directory exists
     if not os.path.exists('temp'):
         os.makedirs('temp')
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0')
