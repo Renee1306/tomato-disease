@@ -199,6 +199,8 @@ def get_statistics_data():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
+
 if __name__ == '__main__':
     # Ensure the temp directory exists
     if not os.path.exists('temp'):
