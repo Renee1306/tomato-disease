@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tomato Land - Statistics</title>
+    <link rel="stylesheet" href="/static/css/types.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2&display=swap">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Include Chart.js -->
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="logo">
+            <img src="/static/img/logo.png" alt="TomatoPlant Logo" style="width: 250px; height: auto;">
+        </div>
+        <nav class="nav">
+            <a href="{{ url_for('home') }}" class="{{ 'active' if request.path == '/' else '' }}">Home</a>
+            <a href="{{ url_for('diagnosis') }}" class="{{ 'active' if request.path == '/diagnosis' else '' }}">Diagnosis</a>
+            <a href="{{ url_for('types') }}" class="{{ 'active' if request.path == '/types' else '' }}">Types</a>
+            <a href="{{ url_for('support') }}" class="{{ 'active' if request.path == '/support' else '' }}">Support</a>
+            <a href="{{ url_for('statistics') }}" class="{{ 'active' if request.path == '/statistics' else '' }}">Statistics</a>
+        </nav>
+    </header>
+    <!-- Main Section -->
+    <main>
+        <div style="width: 80%; margin: auto; padding: 20px;">
+            <h1>Real-Time Disease Statistics</h1>
+            <canvas id="diseaseChart"></canvas> <!-- Chart Canvas -->
+        </div>
+    </main>
+
+    <script>
+        async function fetchDiseaseData() {
+            try {
+                // Fetch data from the /statistics-data endpoint
+                const response = await fetch('/statistics-data');
+                const data = await response.json();
+
+                // Prepare data for the chart
+                const diseases = data.map(item => item.disease);
+                const counts = data.map(item => item.count);
+
+                // Create or update the chart
+                const ctx = document.getElementById('diseaseChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: diseases,
+                        datasets: [{
+                            label: 'Number of Uploads',
+                            data: counts,
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top'
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Error fetching statistics data:', error);
+            }
+        }
+
+        // Refresh the chart every 5 seconds
+        fetchDiseaseData();
+        setInterval(fetchDiseaseData, 5000);
+    </script>
+</body>
+</html>
