@@ -42,7 +42,6 @@ class SEBlock(layers.Layer):
 # Load the pre-trained CNN model for image classification
 cnn_model = tf.keras.models.load_model("cnn_model.h5", custom_objects={'SEBlock': SEBlock})
 
-# Define the image size for the CNN model
 IMG_SIZE = (256, 256)  # Adjust according to your model input size
 
 # Define the class names (use the ones from your dataset)
@@ -52,7 +51,7 @@ class_names = [
     'Late Blight',
     'Leaf Mold', 
     'Septoria Leaf Spot',
-    'Spider Mites Two Spotted Spider Mite', 
+    'Two Spotted Spider Mite', 
     'Target Spot',
     'Tomato Yellow Leaf Curl Virus', 
     'Tomato Mosaic Virus',
