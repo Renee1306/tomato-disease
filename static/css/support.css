@@ -164,3 +164,37 @@ body {
     border-radius: 50%;
     margin-right: 8px;
 }
+
+.preset-questions {
+    display: flex;
+    flex-direction: column; /* Aligns buttons vertically */
+    gap: 10px;
+    position: fixed;
+    right: 20px; /* Distance from the right edge */
+    bottom: 80px; /* Adjust this value to position it above the input box */
+    z-index: 1000; /* Ensures it's on top of other content */
+}
+
+.preset-btn {
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    background-color: #ffffff; /* Matching AI message background color */
+    color: black; /* Matching AI message text color */
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Adding subtle shadow */
+    transition: all 0.3s ease;
+}
+
+.preset-btn:hover {
+    background-color: #597e00; /* Slightly darker shade on hover */
+    color: white;
+    transform: translateY(-2px);
+}
+
+.preset-btn:focus {
+    outline: none;
+    border-color: #597e00; /* Highlight border color on focus to match the user message */
+}
+

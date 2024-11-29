@@ -13,20 +13,19 @@ import datetime
 # Load environment variables from .env file
 load_dotenv()
 
+# Get the GenAI URI and MongoDB URI from the .env file
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-
-# Get the MongoDB URI from the .env file
 mongodb_uri = os.getenv("MONGODB_URI")
 
-# Establish the connection
+# Establish MongoDB connection
 client = MongoClient(mongodb_uri)
+db = client["predictions"]
+collection = db["tomato"]
 
-db = client["predictions"]  
-collection = db["tomato"]  
-
+# Define SEBlock for the CNN model
 class SEBlock(layers.Layer):
-    def __init__(self, filters, reduction=16, **kwargs):  
-        super(SEBlock, self).__init__(**kwargs) 
+    def __init__(self, filters, reduction=16, **kwargs):
+        super(SEBlock, self).__init__(**kwargs)
         self.global_avg_pool = layers.GlobalAveragePooling2D()
         self.dense1 = layers.Dense(filters // reduction, activation='relu')
         self.dense2 = layers.Dense(filters, activation='sigmoid')
@@ -35,27 +34,18 @@ class SEBlock(layers.Layer):
         se = self.global_avg_pool(inputs)
         se = self.dense1(se)
         se = self.dense2(se)
-        se = layers.Reshape((1, 1, se.shape[-1]))(se)  
-        return inputs * se  
-
+        se = layers.Reshape((1, 1, se.shape[-1]))(se)
+        return inputs * se
 
 # Load the pre-trained CNN model for image classification
 cnn_model = tf.keras.models.load_model("cnn_model.h5", custom_objects={'SEBlock': SEBlock})
 
-IMG_SIZE = (256, 256)  # Adjust according to your model input size
-
-# Define the class names (use the ones from your dataset)
+# Define image size and class names
+IMG_SIZE = (256, 256)
 class_names = [
-    'Bacterial Spot', 
-    'Early Blight', 
-    'Late Blight',
-    'Leaf Mold', 
-    'Septoria Leaf Spot',
-    'Two Spotted Spider Mite', 
-    'Target Spot',
-    'Tomato Yellow Leaf Curl Virus', 
-    'Tomato Mosaic Virus',
-    'Healthy'
+    'Bacterial Spot', 'Early Blight', 'Late Blight', 'Leaf Mold', 
+    'Septoria Leaf Spot', 'Two Spotted Spider Mite', 'Target Spot', 
+    'Tomato Yellow Leaf Curl Virus', 'Tomato Mosaic Virus', 'Healthy'
 ]
 
 # Helper function to preprocess image
@@ -66,8 +56,7 @@ def preprocess_image(img_path, img_size):
     img_array /= 255.0  # Normalize to [0, 1]
     return img_array
 
-
-# Create the Generative AI model for treatment suggestions
+# Setup Generative AI model
 generation_config = {
     "temperature": 1,
     "top_p": 0.95,
@@ -75,14 +64,19 @@ generation_config = {
     "max_output_tokens": 8192,
     "response_mime_type": "text/plain",
 }
-
 genai_model = genai.GenerativeModel(
     model_name="gemini-1.5-pro",
     generation_config=generation_config,
 )
 
+# Initialize Flask application
 app = Flask(__name__)
 
+# Ensure the temp directory exists
+if not os.path.exists('temp'):
+    os.makedirs('temp')
+
+# Routes
 @app.route('/')
 def home():
     return render_template('main.html')
@@ -95,7 +89,6 @@ def diagnosis():
 def predict():
     if 'file' not in request.files:
         return jsonify({'error': 'No file uploaded'}), 400
-    
     file = request.files['file']
 
     # Save the file temporarily
@@ -198,8 +191,6 @@ def get_statistics_data():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+# Run the app
 if __name__ == '__main__':
-    # Ensure the temp directory exists
-    if not os.path.exists('temp'):
-        os.makedirs('temp')
     app.run(host='0.0.0.0')
