@@ -39,6 +39,11 @@
 
     <!-- Footer Input Section -->
     <footer class="footer">
+        <div class="preset-questions">
+            <button class="preset-btn" data-question="What are the common tomato diseases?">What are the common tomato diseases?</button>
+            <button class="preset-btn" data-question="How to prevent tomato leaf diseases?">How to prevent tomato leaf diseases?</button>
+            <button class="preset-btn" data-question="What are the best conditions for growing tomatoes?">What are the best conditions for growing tomatoes?</button>
+        </div>
         <form id="question-form" class="question-form">
             <input type="text" id="question" name="question" placeholder="Type your question here..." required autocomplete="off">
             <button type="submit">Send</button>
@@ -47,44 +52,57 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $("#question-form").on("submit", function(event) {
-                event.preventDefault();
-                var question = $("#question").val();
-                
-                $("#chat-box").append('<div class="message user-message">' + question + '</div>');
-                $("#question").val(""); // Clear input
-                
-                $("#chat-box").scrollTop($("#chat-box")[0].scrollHeight);
-                
-                let typingIndicator = $(`
-                    <div class="ai-message-wrapper typing-indicator">
-                        <div class="ai-header">
-                            <img src="/static/img/chatomato.png" alt="Chatomato Logo" class="ai-logo">
-                        </div>
-                        <div class="message ai-message typing">Dr.Toma is typing<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></div>
+      $(document).ready(function() {
+    // Add click handler for preset questions
+    $(".preset-btn").on("click", function() {
+        const question = $(this).data("question");
+
+        // Hide the preset questions after clicking one
+        $(".preset-questions").fadeOut();
+
+        // Set the clicked question to the input field and submit
+        $("#question").val(question);
+        $("#question-form").submit();
+    });
+
+    $("#question-form").on("submit", function(event) {
+        event.preventDefault();
+        var question = $("#question").val();
+        
+        $("#chat-box").append('<div class="message user-message">' + question + '</div>');
+        $("#question").val(""); // Clear input
+        
+        $("#chat-box").scrollTop($("#chat-box")[0].scrollHeight);
+        
+        let typingIndicator = $(` 
+            <div class="ai-message-wrapper typing-indicator">
+                <div class="ai-header">
+                    <img src="/static/img/chatomato.png" alt="Chatomato Logo" class="ai-logo">
+                </div>
+                <div class="message ai-message typing">Dr.Toma is typing<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></div>
+            </div>
+        `);
+        $("#chat-box").append(typingIndicator);
+        
+        $.post("/ask", { question: question }, function(data) {
+            typingIndicator.remove();
+            let cleanResponse = data.response.replace(/```html|```/g, "").trim();
+
+            $("#chat-box").append(`
+                <div class="ai-message-wrapper">
+                    <div class="ai-header">
+                        <img src="/static/img/chatomato.png" alt="Chatomato Logo" class="ai-logo">
                     </div>
-                `);
-                $("#chat-box").append(typingIndicator);
-                
-                $.post("/ask", { question: question }, function(data) {
-                    typingIndicator.remove();
-                    let cleanResponse = data.response.replace(/```html|```/g, "").trim();
-    
-                    $("#chat-box").append(`
-                        <div class="ai-message-wrapper">
-                            <div class="ai-header">
-                                <img src="/static/img/chatomato.png" alt="Chatomato Logo" class="ai-logo">
-                            </div>
-                            <div class="message ai-message">${cleanResponse}</div>
-                        </div>
-                    `);
-                    
-                    // Scroll to the bottom of the chat
-                    $("#chat-box").scrollTop($("#chat-box")[0].scrollHeight);
-                });
-            });
+                    <div class="message ai-message">${cleanResponse}</div>
+                </div>
+            `);
+            
+            // Scroll to the bottom of the chat
+            $("#chat-box").scrollTop($("#chat-box")[0].scrollHeight);
         });
+    });
+});
+
     </script>
       
 </body>
