@@ -12,5 +12,5 @@ numpy
 Pillow
 huggingface_hub
 geoip2
-pymongo python-dotenv
+pymongo
 python-dotenv
