@@ -1,0 +1,5 @@
+![Main Page](assets/MainPage.png)
+![Diagnosis](assets/Diagnosis.png)
+![Types](assets/Types.png)
+![Support](assets/Support.png)
+![Statistic](assets/Statistic.png)
