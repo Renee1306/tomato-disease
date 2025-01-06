@@ -15,9 +15,9 @@ load_dotenv()
 
 # Get the GenAI URI and MongoDB URI from the .env file
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-mongodb_uri = os.getenv("MONGODB_URI")
 
 # Establish MongoDB connection
+mongodb_uri = os.getenv("MONGODB_URI")
 client = MongoClient(mongodb_uri)
 db = client["predictions"]
 collection = db["tomato"]
@@ -38,7 +38,7 @@ class SEBlock(layers.Layer):
         return inputs * se
 
 # Load the pre-trained CNN model for image classification
-cnn_model = tf.keras.models.load_model("cnn_model.h5", custom_objects={'SEBlock': SEBlock})
+cnn_model = tf.keras.models.load_model("cnn_model_2.h5", custom_objects={'SEBlock': SEBlock})
 
 # Define image size and class names
 IMG_SIZE = (256, 256)
@@ -194,3 +194,4 @@ def get_statistics_data():
 # Run the app
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
+

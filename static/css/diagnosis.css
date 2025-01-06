@@ -58,6 +58,7 @@ body {
 #drop-zone p {
     font-size: 18px;
     color: #333;
+    white-space: nowrap; /* Prevent text wrapping */
 }
 
 #drop-zone .browse {
@@ -70,7 +71,7 @@ body {
     color: #888;
 }
 
-#predictButton {
+#predictButton, #recropButton {
     margin-top: 20px;
     padding: 12px 25px;
     font-size: 18px;
@@ -86,15 +87,28 @@ body {
     background-color: #3a5230;
 }
 
+/* Image Preview Container */
 #imagePreviewContainer {
-    margin-top: 20px;
+    background-color: transparent; /* Remove any background */
+    border: 2px dashed #4a653e; /* Dashed border to indicate drop zone */
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 300px; /* Fixed height for consistency */
+    width: 100%; /* Ensure it takes full width */
+    margin-top: 10px; /* Add spacing */
+    overflow: hidden; /* Hide overflow to maintain fixed dimensions */
 }
 
+/* Image Preview */
 #imagePreview {
-    width: 100%;
-    max-width: 300px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    background-color: transparent; /* Remove any background */
+    border: none; /* Remove borders if any */
+    max-height: 100%; /* Fit within the container's height */
+    width: auto; /* Width adjusts automatically to maintain aspect ratio */
+    object-fit: contain; /* Ensure the entire image is visible */
+    display: block;
 }
 
 #predictionResult h3 {
@@ -177,6 +191,7 @@ body {
     box-sizing: border-box;
 }
 
+/* Modal Content Styling */
 .modal-content {
     background-color: #ffffff;
     padding: 20px 30px; /* Add padding on left and right */
@@ -188,6 +203,7 @@ body {
     text-align: left;
 }
 
+/* Close Button Styling */
 .close-button {
     color: #aaa;
     float: right;
@@ -201,7 +217,6 @@ body {
     color: #333;
 }
 
-
 /* Loading Spinner Styles */
 #loadingSpinner {
     display: flex;
@@ -212,13 +227,13 @@ body {
 }
 
 .spinner {
-    border: 4px solid rgba(0, 0, 0, 0.1); /* Light border */
-    border-top: 4px solid #4a653e; /* Darker border for animation */
+    border: 8px solid #f3f3f3; /* Light grey */
+    border-top: 8px solid #4a653e; /* Blue */
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-    margin-bottom: 10px; /* Spacing above "Loading..." text */
+    width: 60px;
+    height: 60px;
+    animation: spin 2s linear infinite;
+    margin: 20px auto;
 }
 
 @keyframes spin {
@@ -232,4 +247,146 @@ body {
     margin-top: 5px;
 }
 
+/* Crop Modal Styles */
+#cropModal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent dark overlay */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
+#cropModalContent {
+    width: 600px; /* Fixed width */
+    max-width: 90%; /* Responsive adjustment */
+    height: 600px; /* Fixed height */
+    max-height: 90%; /* Responsive adjustment */
+    background-color: #fff; /* Solid background */
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3); /* Enhanced shadow */
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden; /* Hide overflow to maintain fixed size */
+}
+
+.close-crop-modal, .close-treatment-modal {
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    color: #000;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 1001; /* Ensure it stays above other elements */
+}
+
+#cropModalContent h2 {
+    margin: 20px 20px 10px; /* Adjusted margins for spacing */
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+    flex-shrink: 0; /* Prevent shrinking */
+}
+
+#cropImageContainer {
+    flex: 1; /* Occupies available space */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f9f9f9; /* Light background for the image area */
+    padding: 10px; /* Add padding for better spacing */
+    height: 400px; /* Fixed height for the grey area */
+}
+
+#cropImage {
+    max-height: 100%;
+    width: auto; /* Width adjusts automatically to maintain aspect ratio */
+    object-fit: contain; /* Maintain aspect ratio without cropping */
+}
+
+.modal-buttons {
+    padding: 10px 20px; /* Horizontal padding for better spacing */
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    gap: 15px; /* Space between buttons */
+    background-color: #f1f1f1; /* Light grey background */
+    margin-top: 10px; /* Space above buttons */
+    margin-bottom: 20px; /* Space below buttons */
+    flex-shrink: 0; /* Prevent shrinking */
+}
+
+/* Modal Buttons */
+.modal-buttons button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    white-space: nowrap; /* Prevent text wrapping */
+    background-color: #4a653e; /* Blue background */
+    color: white;
+}
+
+.modal-buttons button:hover {
+    background-color: #4a653e; /* Darker blue on hover */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 650px) {
+    #cropModalContent {
+        width: 90%;
+        height: 90%;
+    }
+
+    #cropImageContainer {
+        height: 200px; /* Adjusted for smaller screens */
+    }
+
+    .modal-buttons {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px; /* Reduced gap for vertical layout */
+    }
+
+    .modal-buttons button {
+        width: 100%; /* Full-width buttons on small screens */
+    }
+
+    #cropModalContent h2 {
+        margin: 20px 10px 10px; /* Adjust margins for smaller screens */
+        font-size: 20px; /* Slightly smaller font */
+    }
+
+    #drop-zone p {
+        white-space: normal; /* Allow wrapping on smaller screens */
+        text-align: center;    /* Center the text */
+    }
+}
+
+/* Optional: Style the dragover state */
+#drop-zone.dragover {
+    border: 2px dashed #4a653e;
+    background-color: #ecf0f1; /* Slightly darker light blue on dragover */
+}
+
+/* Optional: Style buttons globally */
+button {
+    background-color: #3498db; /* Blue background */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #4a653e; /* Darker blue on hover */
+}

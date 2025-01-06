@@ -60,16 +60,16 @@
     "seasonal_occurrence": "Common in warm, wet climates."
   },
   {
-    "id": "target_spot",
-    "name": "Target Spot",
-    "scientific_name": "Corynespora cassiicola",
+    "id": "powdery_mildew",
+    "name": "Powdery Mildew",
+    "scientific_name": "Erysiphe cichoracearum",
     "causes": "Fungal infection.",
-    "symptoms": "Dark spots with target-like rings on leaves.",
-    "spread_transmission": "Spores spread by wind, water, and soil.",
-    "prevention": "Avoid overhead irrigation and remove infected leaves.",
-    "treatment": "Apply fungicides and remove diseased parts.",
-    "impact": "Reduces plant health and yield.",
-    "seasonal_occurrence": "Common in humid conditions."
+    "symptoms": "White, powdery spots on leaves, stems, and buds.",
+    "spread_transmission": "Spores spread by wind and water.",
+    "prevention": "Ensure proper spacing for air circulation and remove infected plant parts.",
+    "treatment": "Apply fungicides and remove affected leaves.",
+    "impact": "Reduces photosynthesis and weakens plant growth.",
+    "seasonal_occurrence": "Common in dry, warm conditions."
   },
   {
     "id": "two_spotted_spider_mite",
